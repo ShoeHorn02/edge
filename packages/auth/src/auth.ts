@@ -1,0 +1,78 @@
+import { db } from "@workspace/db/client";
+import { magicLink, oAuthProxy } from "better-auth/plugins"
+import type { BetterAuthOptions } from "better-auth";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { keys } from "../keys";
+import { Resend } from "resend";
+
+
+const resend = new Resend(keys().EMAIL_RESEND_API_KEY);
+
+export const config = {
+    database: drizzleAdapter(db, {
+        provider: "pg"
+    }),
+    secret: keys().AUTH_SECRET,
+    session: {
+    expiresIn: 60 * 60 * 24,
+  },
+  user: {
+    additionalFields: {
+      completedOnboarding: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+      },
+    },
+  },
+    plugins: [
+		magicLink({
+			async sendMagicLink(data) {
+				console.log({
+					data,
+				});
+				await resend.emails.send({
+					from: keys().EMAIL_FROM,
+					to: data.email,
+					subject: "Sign in to Better Auth",
+					html: `
+						<p>Click the link below to sign in to Better Auth:</p>
+						<a href="${data.url}">Sign in</a>
+					`,
+				});
+			},
+		}),
+      oAuthProxy()
+    ],
+    socialProviders: {
+        google: {
+            clientId: keys().AUTH_GOOGLE_CLIENT_ID,
+            clientSecret: keys().AUTH_GOOGLE_CLIENT_SECRET,
+            redirectURI: "http://localhost:3000/api/auth/callback/google",
+        },
+        microsoft: {
+            clientId: keys().AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID,
+            clientSecret: keys().AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET,
+            redirectURI: "http://localhost:3000/dashboard",
+        },
+    },
+    onAPIError: {
+      onError(error, ctx) {
+        console.error("BETTER AUTH API ERROR", error, ctx);
+      },
+    },
+} satisfies BetterAuthOptions
+
+export const auth = betterAuth(config);
+
+type BaseSession = typeof auth.$Infer.Session;
+
+export type Session = {
+  session: BaseSession['session'];
+  user: Omit<BaseSession['user'], 'completedOnboarding'> & Partial<{
+    completedOnboarding: boolean | null;
+  }>;
+};
+
+

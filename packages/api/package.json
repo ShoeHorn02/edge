@@ -1,0 +1,37 @@
+{
+  "name": "@workspace/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo build dist node_modules",
+    "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,mdx}\" --ignore-path=\"../../.prettierignore\"",
+    "format:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,mdx}\" --ignore-path=\"../../.prettierignore\"",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint --fix .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@workspace/auth": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@trpc/server": "11.7.2",
+    "superjson": "2.2.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/prettier-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9.32.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
+  },
+  "prettier": "@workspace/prettier-config"
+}

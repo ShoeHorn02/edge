@@ -59,7 +59,7 @@ export const config = {
         microsoft: {
             clientId: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID!,
             clientSecret: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET!,
-            redirectURI: `${getBaseUrl()}/organizations`,
+            redirectURI: `${getBaseUrl()}/api/auth/callback/microsoft`,
         },
     },
     onAPIError: {

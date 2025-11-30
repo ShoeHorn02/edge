@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { keys } from '@/keys';
+import { env } from '@workspace/env';
 import type { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink, loggerLink } from '@trpc/client';
@@ -34,7 +34,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
       links: [
         loggerLink({
           enabled: (op) =>
-            keys().NODE_ENV === 'development' ||
+            env.NODE_ENV === 'development' ||
             (op.direction === 'down' && op.result instanceof Error)
         }),
         httpBatchLink({

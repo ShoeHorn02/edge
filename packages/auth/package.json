@@ -23,14 +23,14 @@
     "@auth/core": "0.34.2",
     "@auth/drizzle-adapter": "1.4.2",
     "@better-auth/passkey": "^1.4.3",
-    "@t3-oss/env-nextjs": "^0.11.1",
     "@workspace/db": "workspace:*",
+    "@workspace/env": "workspace:*",
     "better-auth": "^1.4.3",
     "next": "^16.0.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
     "resend": "^6.5.2",
-    "zod": "^3.25.76"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@types/react": "^19.2.7",
@@ -38,9 +38,9 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/prettier-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "eslint": "^9.32.0",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "eslint": "9.39.1",
+    "prettier": "^3.7.1",
+    "typescript": "5.9.3"
   },
   "prettier": "@workspace/prettier-config"
 }

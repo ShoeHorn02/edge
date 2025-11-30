@@ -1,8 +1,8 @@
 import { defineConfig } from 'drizzle-kit';
-import { keys } from './keys';
+import { env } from '@workspace/env';
 
-if (!keys().DATABASE_URL) {
-  throw new Error("Missing POSTGRES_URL");
+if (!env.DATABASE_URL) {
+  throw new Error("Missing DATABASE_URL");
 }
 
 export default defineConfig({
@@ -10,6 +10,6 @@ export default defineConfig({
   out: './drizzle', // Your migrations folder
   dialect: 'postgresql',
   dbCredentials: {
-    url: keys().DATABASE_URL,
+    url: env.DATABASE_URL,
   },
 });

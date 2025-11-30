@@ -29,21 +29,21 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
-    "@t3-oss/env-nextjs": "^0.11.1",
+    "@workspace/env": "workspace:*",
     "drizzle-orm": "^0.35.1",
     "drizzle-zod": "^0.5.1",
     "pg": "^8.16.3",
-    "zod": "^3.25.76"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/prettier-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "dotenv-cli": "^7.4.2",
+    "dotenv-cli": "^10.0.0",
     "drizzle-kit": "^0.26.2",
-    "eslint": "^9.32.0",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "eslint": "9.39.1",
+    "prettier": "^3.7.1",
+    "typescript": "5.9.3"
   },
   "prettier": "@workspace/prettier-config"
 }

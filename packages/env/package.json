@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/api",
+  "name": "@workspace/env",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,21 +11,18 @@
   },
   "license": "MIT",
   "scripts": {
-    "clean": "git clean -xdf .cache .turbo build dist node_modules",
-    "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,mdx}\" --ignore-path=\"../../.prettierignore\"",
-    "format:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,mdx}\" --ignore-path=\"../../.prettierignore\"",
-    "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint --fix .",
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@trpc/server": "^11.7.2",
-    "@workspace/auth": "workspace:*",
-    "@workspace/db": "workspace:*",
-    "superjson": "2.2.3",
+    "@t3-oss/env-nextjs": "^0.13.8",
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@types/node": "24.10.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/prettier-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",

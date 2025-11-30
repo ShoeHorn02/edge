@@ -20,14 +20,14 @@
   },
     "globalEnv": [
     "DATABASE_URL",
+    "AUTH_SECRET",
     "AUTH_GOOGLE_CLIENT_ID",
     "AUTH_GOOGLE_CLIENT_SECRET",
     "AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID",
     "AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET",
     "EMAIL_FROM",
     "EMAIL_RESEND_API_KEY",
-    "PORT",
-    "AUTH_SECRET"
+    "PORT"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",

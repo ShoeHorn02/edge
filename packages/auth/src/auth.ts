@@ -1,19 +1,19 @@
 import { db } from "@workspace/db/client";
+import { env } from "@workspace/env";
 import { magicLink, oAuthProxy } from "better-auth/plugins"
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { keys } from "../keys";
 import { Resend } from "resend";
 
 
-const resend = new Resend(keys().EMAIL_RESEND_API_KEY);
+const resend = new Resend(env.EMAIL_RESEND_API_KEY);
 
 export const config = {
     database: drizzleAdapter(db, {
         provider: "pg"
     }),
-    secret: keys().AUTH_SECRET,
+    secret: env.AUTH_SECRET,
     session: {
     expiresIn: 60 * 60 * 24,
   },
@@ -33,7 +33,7 @@ export const config = {
 					data,
 				});
 				await resend.emails.send({
-					from: keys().EMAIL_FROM,
+					from: env.EMAIL_FROM!,
 					to: data.email,
 					subject: "Sign in to Better Auth",
 					html: `
@@ -47,13 +47,13 @@ export const config = {
     ],
     socialProviders: {
         google: {
-            clientId: keys().AUTH_GOOGLE_CLIENT_ID,
-            clientSecret: keys().AUTH_GOOGLE_CLIENT_SECRET,
+            clientId: env.AUTH_GOOGLE_CLIENT_ID!,
+            clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET!,
             redirectURI: "http://localhost:3000/api/auth/callback/google",
         },
         microsoft: {
-            clientId: keys().AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID,
-            clientSecret: keys().AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET,
+            clientId: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID!,
+            clientSecret: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET!,
             redirectURI: "http://localhost:3000/dashboard",
         },
     },

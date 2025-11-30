@@ -3,17 +3,29 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "build": "turbo run build",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo run clean",
+    "auth:generate": "pnpm -F @workspace/auth generate",
+    "db:push": "turbo -F @workspace/db push",
+    "db:studio": "turbo -F @workspace/db studio",
+    "dev": "turbo watch dev --continue",
+    "dev:next": "turbo watch dev -F @workspace/nextjs...",
+    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
+    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
+    "lint:ws": "pnpm dlx sherif@latest",
+    "postinstall": "pnpm lint:ws",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "prettier": "^3.6.2",
+    "dotenv-cli": "^10.0.0",
+    "prettier": "^3.7.1",
     "turbo": "^2.5.5",
-    "typescript": "5.7.3"
+    "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.4.1",
   "engines": {

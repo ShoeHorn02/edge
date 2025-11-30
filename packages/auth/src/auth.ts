@@ -9,6 +9,11 @@ import { Resend } from "resend";
 
 const resend = new Resend(env.EMAIL_RESEND_API_KEY);
 
+export const getBaseUrl = () => {
+  if (typeof window !== 'undefined') return window.location.origin;
+  return env.NODE_ENV === "production" ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : `http://localhost:3000`;
+};
+
 export const config = {
     database: drizzleAdapter(db, {
         provider: "pg"
@@ -49,12 +54,12 @@ export const config = {
         google: {
             clientId: env.AUTH_GOOGLE_CLIENT_ID!,
             clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET!,
-            redirectURI: "http://localhost:3000/api/auth/callback/google",
+            redirectURI: `${getBaseUrl()}/api/auth/callback/google`,
         },
         microsoft: {
             clientId: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID!,
             clientSecret: env.AUTH_MICROSOFT_ENTRA_ID_CLIENT_SECRET!,
-            redirectURI: "http://localhost:3000/dashboard",
+            redirectURI: `${getBaseUrl()}/dashboard`,
         },
     },
     onAPIError: {

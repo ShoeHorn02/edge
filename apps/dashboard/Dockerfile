@@ -27,9 +27,14 @@ WORKDIR /app/apps/dashboard
 # Copy all from deps stage
 COPY --from=deps /app /app
 
-# Set default env vars so build doesn't break
-ENV NEXT_PUBLIC_API_URL="https://example.com/api"
-ENV DATABASE_URL="dummy"
+# Set ARGs for build-time variables (passed by GitHub Actions)
+# These are needed to satisfy the Next.js/build requirements.
+ARG NEXT_PUBLIC_API_URL
+ARG DATABASE_URL
+
+# Set ENV variables from ARGs for the build process
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Build the dashboard app
 RUN pnpm install
@@ -49,6 +54,10 @@ COPY --from=build /app/apps/dashboard /app/apps/dashboard
 RUN pnpm install --frozen-lockfile --prod
 
 ENV NODE_ENV=production
+# Set placeholders for runtime ENVs. DigitalOcean will override these with secrets.
+ENV DATABASE_URL=dummy
+ENV AUTH_SECRET=dummy
+
 EXPOSE 3000
 
 CMD ["pnpm", "start"]

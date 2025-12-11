@@ -33,7 +33,9 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/edge-app:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/edge-app:${{ github.sha }}
-          # 🎯 ADDED: Pass build arguments from GitHub Secrets to Dockerfile ARGs
           build-args: |
+            # Using the names from your last input:
             DATABASE_URL=${{ secrets.DATABASE_URL_PLACEHOLDER }}
             NEXT_PUBLIC_API_URL=${{ secrets.GHA_BUILD_NEXT_PUBLIC_API_URL_PLACEHOLDER }}
+            # CRITICAL FIX: Include the required AUTH_SECRET
+            AUTH_SECRET=${{ secrets.GHA_BUILD_AUTH_SECRET_PLACEHOLDER }}

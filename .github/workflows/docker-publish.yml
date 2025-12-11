@@ -2,21 +2,17 @@ name: Build & Push Docker Image
 
 on:
   push:
-    branches: [ "main" ]  # run on pushes to main
+    branches: ["main"]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -33,6 +29,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/edge-app:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/edge-app:${{ github.sha }}
-          # Optional: pass build args if any env is needed at build-time
           build-args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            # add other required env vars here

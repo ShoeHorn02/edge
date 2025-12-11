@@ -1,44 +1,51 @@
 # ----------------------------
-# 1. Base Builder (Node 22 + PNPM)
+# Stage 1: deps
 # ----------------------------
-FROM node:22-slim AS base
-RUN npm install -g pnpm
+FROM node:22-slim AS deps
 
-# ----------------------------
-# 2. Install Dependencies
-# ----------------------------
-FROM base AS deps
 WORKDIR /app
 
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy monorepo manifests
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
 COPY packages ./packages
 COPY apps ./apps
+COPY tooling ./tooling
 
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
 # ----------------------------
-# 3. Build all Turborepo packages
+# Stage 2: build
 # ----------------------------
-FROM base AS build
+FROM deps AS build
+
 WORKDIR /app
+
+# Copy installed deps
 COPY --from=deps /app /app
 
-# Build everything including Next.js "dashboard"
+# Build apps (dashboard)
+# Make sure your build scripts can handle missing .env (use defaults or NEXT_PUBLIC_*)
 RUN pnpm turbo run build --filter=dashboard...
 
 # ----------------------------
-# 4. Production Runner for Next.js (Standalone Output)
+# Stage 3: release
 # ----------------------------
-FROM node:22-slim AS runner
+FROM node:22-slim AS release
+
 WORKDIR /app
 
+# Copy built files from build stage
+COPY --from=build /app /app
+
+# Install only production deps
+RUN pnpm install --frozen-lockfile --prod
+
 ENV NODE_ENV=production
-ENV PORT=3000
-
-# Copy the Next.js server (standalone)
-COPY --from=build /app/apps/dashboard/.next/standalone ./
-COPY --from=build /app/apps/dashboard/.next/static ./apps/dashboard/.next/static
-COPY --from=build /app/apps/dashboard/public ./apps/dashboard/public
-
 EXPOSE 3000
-CMD ["node", "apps/dashboard/server.js"]
+
+WORKDIR /app/apps/dashboard
+CMD ["pnpm", "start"]
